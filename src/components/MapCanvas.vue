@@ -1,58 +1,83 @@
 <script>
+  import mapImg from "@/assets/map.png"
   export default {
     data() {
       return {
         canvas: null,
-        image: null,
-        imageScale: null,
         offsetX: null,
         offsetY: null,
-        velocityX: null,
-        velocityY: null,
-        lastX: null,
-        lastY: null,
-        targetX: null,
-        targetY: null,
-        targetScale: 1,
+        scaleSize: 1,
         scaleFactor: 1,
         dragging: false,
+        pinching: false,
         scaling: false,
       };
     },
     mounted() {
       this.canvas = this.$refs.map;
+      this.touch = window.matchMedia("(pointer: coarse)").matches;
       this.image = new Image();
-      this.image.src = './map.png';
+      this.image.src = mapImg;
       this.image.onload = () => {
-        this.imageScale = Math.max(this.canvas.width / this.image.width, this.canvas.height / this.image.height);
-        this.scale();
+        let imageScale = Math.max(this.canvas.width / this.image.width, this.canvas.height / this.image.height);
+        this.imageWidth = this.image.width * imageScale;
+        this.imageHeight = this.image.height * imageScale;
+        this.draw();
       };
     },
     methods: {
+      getDistance(point1, point2) {
+        return Math.sqrt((point2.clientX - point1.clientX) ** 2 + (point2.clientY - point1.clientY) ** 2);
+      },
       draw() {
+        this.width = this.imageWidth * this.scaleSize;
+        this.height = this.imageHeight * this.scaleSize;
         this.offsetX = Math.min(Math.max(this.offsetX, this.canvas.width - this.width), 0);
         this.offsetY = Math.min(Math.max(this.offsetY, this.canvas.height - this.height), 0);
-        let ctx = this.canvas.getContext('2d');
+        let ctx = this.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.drawImage(this.image, this.offsetX, this.offsetY, this.width, this.height);
       },
-      mousedown(e) {
+      pressed(e) {
+        if (this.touch) {
+          if (e.touches.length > 1) {
+            this.pinching = true;
+            this.lastDistance = this.getDistance(e.touches[0], e.touches[1]);
+          }
+          e = e.touches[0];
+        }
         this.dragging = true;
         this.lastX = e.clientX;
         this.lastY = e.clientY;
       },
-      mouseup() {
+      released() {
+        this.pinching = false;
         this.dragging = false;
         requestAnimationFrame(this.drift);
       },
-      mousemove(e) {
+      move(e) {
+        if (this.touch) {
+          if (this.pinching) {
+            let newDistance = this.getDistance(e.touches[0], e.touches[1]);
+            this.scaleFactor *= newDistance / this.lastDistance;
+            this.scaleFactor = Math.max(1, Math.min(this.scaleFactor, 5));
+            this.lastDistance = newDistance;
+            let centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+            let centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            this.offsetX = centerX - ((centerX - this.offsetX) / this.scaleSize) * this.scaleFactor;
+            this.offsetY = centerY - ((centerY - this.offsetY) / this.scaleSize) * this.scaleFactor;
+            this.scaleSize = this.scaleFactor;
+            this.draw();
+          }
+          e = e.touches[0];
+        }
         if (this.dragging) {
-          let dx = e.clientX - this.lastX;
-          let dy = e.clientY - this.lastY;
-          this.offsetX += dx;
-          this.offsetY += dy;
-          this.velocityX = dx;
-          this.velocityY = dy;
+          let deltaX = e.clientX - this.lastX;
+          let deltaY = e.clientY - this.lastY;
+          this.offsetX += deltaX;
+          this.offsetY += deltaY;
+          this.velocityX = deltaX;
+          this.velocityY = deltaY;
           this.lastX = e.clientX;
           this.lastY = e.clientY;
           this.draw();
@@ -60,45 +85,43 @@
       },
       wheel(e) {
         e.preventDefault();
-        if (this.scaling) return;
+        if (this.scaling || this.dragging) return;
         this.scaling = true;
-        this.targetScale = e.deltaY < 0 ? Math.min(5, this.targetScale + 0.2) : Math.max(1, this.targetScale - 0.2);
-        this.targetX = e.offsetX - ((e.offsetX - this.offsetX) * this.targetScale) / this.scaleFactor;
-        this.targetY = e.offsetY - ((e.offsetY - this.offsetY) * this.targetScale) / this.scaleFactor;
+        this.scaleFactor = e.deltaY < 0 ? Math.min(5, this.scaleFactor + 0.2) : Math.max(1, this.scaleFactor - 0.2);
+        this.targetX = e.offsetX - ((e.offsetX - this.offsetX) * this.scaleFactor) / this.scaleSize;
+        this.targetY = e.offsetY - ((e.offsetY - this.offsetY) * this.scaleFactor) / this.scaleSize;
         requestAnimationFrame(this.scale);
         this.scaling = false;
       },
       drift() {
-        if (!this.dragging) {
-          this.offsetX += this.velocityX;
-          this.offsetY += this.velocityY;
-          this.velocityX *= 0.95;
-          this.velocityY *= 0.95;
-          this.draw();
-          if (Math.abs(this.velocityX) > 0.01 || Math.abs(this.velocityY > 0.01)) {
-            requestAnimationFrame(this.drift);
-          } else {
-            this.velocityX = 0;
-            this.velocityY = 0;
-          }
+        if (this.dragging) return;
+        this.offsetX += this.velocityX;
+        this.offsetY += this.velocityY;
+        this.velocityX *= 0.95;
+        this.velocityY *= 0.95;
+        this.draw();
+        if (Math.abs(this.velocityX) > 0.01 || Math.abs(this.velocityY > 0.01)) {
+          requestAnimationFrame(this.drift);
+        } else {
+          this.velocityX = 0;
+          this.velocityY = 0;
         }
       },
       scale() {
-        let moveDiffX = this.targetX - this.offsetX;
-        let moveDiffY = this.targetY - this.offsetY;
-        let scaleDiff = this.targetScale - this.scaleFactor;
-        this.offsetX += moveDiffX * 0.1;
-        this.offsetY += moveDiffY * 0.1;
-        this.scaleFactor += scaleDiff * 0.1;
-        this.width = this.image.width * this.imageScale * this.scaleFactor;
-        this.height = this.image.height * this.imageScale * this.scaleFactor;
+        if (this.dragging) return;
+        let moveDeltaX = this.targetX - this.offsetX;
+        let moveDeltaY = this.targetY - this.offsetY;
+        let scaleDelta = this.scaleFactor - this.scaleSize;
+        this.offsetX += moveDeltaX * 0.1;
+        this.offsetY += moveDeltaY * 0.1;
+        this.scaleSize += scaleDelta * 0.1;
         this.draw();
-        if (Math.abs(moveDiffX) > 0.01 || Math.abs(moveDiffY) > 0.01 || Math.abs(scaleDiff) > 0.01) {
+        if (Math.abs(moveDeltaX) > 0.01 || Math.abs(moveDeltaY) > 0.01 || Math.abs(scaleDelta) > 0.01) {
           requestAnimationFrame(this.scale);
         } else {
           this.offsetX = this.targetX;
           this.offsetY = this.targetY;
-          this.scaleFactor = this.targetScale;
+          this.scaleSize = this.scaleFactor;
         }
       },
     },
@@ -107,10 +130,14 @@
 
 <template>
   <canvas ref="map" width="900" height="600"
-    @mousedown="mousedown"
-    @mouseup="mouseup"
-    @mouseleave="mouseup"
-    @mousemove="mousemove"
+    style="touch-action: none;"
+    @mousedown="pressed"
+    @mouseup="released"
+    @mouseleave="released"
+    @mousemove="move"
+    @touchstart="pressed"
+    @touchend="released"
+    @touchmove="move"
     @wheel="wheel">
   </canvas>
 </template>
