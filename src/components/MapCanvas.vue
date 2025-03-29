@@ -140,7 +140,7 @@
 </script>
 
 <template>
-  <div class="canvas-container d-flex rounded-4 overflow-hidden m-3">
+  <div class="canvas-container d-flex mt-4 mb-3 rounded-3 overflow-hidden">
     <canvas ref="map" class="w-100 h-100"
       @mousedown="pressed"
       @mouseup="released"
@@ -156,14 +156,14 @@
 </template>
 
 <style scoped>
-.canvas-container {
-  width: 90%;
-  height: 95%;
-}
-@media (min-width: 768px) {
   .canvas-container {
-    width: 900px;
-    height: 600px;
+    max-width: 95%;
+    max-height: 95%;
   }
-}
+  @media (min-width: 768px) {
+    .canvas-container {
+      width: 900px;
+      height: 600px;
+    }
+  }
 </style>
