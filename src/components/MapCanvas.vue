@@ -6,6 +6,8 @@
         canvas: null,
         offsetX: null,
         offsetY: null,
+        velocityX: null,
+        velocityY: null,
         scaleSize: 1,
         scaleFactor: 1,
         dragging: false,
@@ -15,20 +17,14 @@
     },
     mounted() {
       this.canvas = this.$refs.map;
-      this.touch = window.matchMedia("(pointer: coarse)").matches;
       this.image = new Image();
       this.image.src = mapImg;
       this.image.onload = () => {
-        let imageScale = Math.max(this.canvas.width / this.image.width, this.canvas.height / this.image.height);
-        this.imageWidth = this.image.width * imageScale;
-        this.imageHeight = this.image.height * imageScale;
-        this.draw();
+        window.addEventListener('resize', this.resize);
+        this.resize();
       };
     },
     methods: {
-      getDistance(point1, point2) {
-        return Math.sqrt((point2.clientX - point1.clientX) ** 2 + (point2.clientY - point1.clientY) ** 2);
-      },
       draw() {
         this.width = this.imageWidth * this.scaleSize;
         this.height = this.imageHeight * this.scaleSize;
@@ -38,11 +34,26 @@
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.drawImage(this.image, this.offsetX, this.offsetY, this.width, this.height);
       },
+      resize() {
+        this.touch = window.matchMedia("(pointer: coarse)").matches;
+        this.canvas.width = this.canvas.clientWidth;
+        this.canvas.height = this.canvas.clientHeight;
+        let imageScale = Math.max(this.canvas.width / this.image.width, this.canvas.height / this.image.height);
+        this.imageWidth = this.image.width * imageScale;
+        this.imageHeight = this.image.height * imageScale;
+        this.offsetX = this.canvas.width / 2 - this.imageWidth / 2;
+        this.offsetY = this.canvas.height / 2 - this.imageHeight / 2;
+        this.draw();
+      },
+      distance(a, b) {
+        return Math.sqrt((b.clientX - a.clientX) ** 2 + (b.clientY - a.clientY) ** 2);
+      },
       pressed(e) {
+        e.preventDefault();
         if (this.touch) {
           if (e.touches.length > 1) {
             this.pinching = true;
-            this.lastDistance = this.getDistance(e.touches[0], e.touches[1]);
+            this.lastDistance = this.distance(e.touches[0], e.touches[1]);
           }
           e = e.touches[0];
         }
@@ -58,7 +69,7 @@
       move(e) {
         if (this.touch) {
           if (this.pinching) {
-            let newDistance = this.getDistance(e.touches[0], e.touches[1]);
+            let newDistance = this.distance(e.touches[0], e.touches[1]);
             this.scaleFactor *= newDistance / this.lastDistance;
             this.scaleFactor = Math.max(1, Math.min(this.scaleFactor, 5));
             this.lastDistance = newDistance;
@@ -129,15 +140,30 @@
 </script>
 
 <template>
-  <canvas ref="map" width="900" height="600"
-    style="touch-action: none;"
-    @mousedown="pressed"
-    @mouseup="released"
-    @mouseleave="released"
-    @mousemove="move"
-    @touchstart="pressed"
-    @touchend="released"
-    @touchmove="move"
-    @wheel="wheel">
-  </canvas>
+  <div class="canvas-container d-flex rounded-4 overflow-hidden m-3">
+    <canvas ref="map" class="w-100 h-100"
+      @mousedown="pressed"
+      @mouseup="released"
+      @mouseleave="released"
+      @mousemove="move"
+      @wheel="wheel"
+      @touchstart="pressed"
+      @touchend="released"
+      @touchmove="move"
+      @contextmenu.prevent>
+    </canvas>
+  </div>
 </template>
+
+<style scoped>
+.canvas-container {
+  width: 90%;
+  height: 95%;
+}
+@media (min-width: 768px) {
+  .canvas-container {
+    width: 900px;
+    height: 600px;
+  }
+}
+</style>
