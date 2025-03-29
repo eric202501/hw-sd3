@@ -6,6 +6,8 @@
         canvas: null,
         offsetX: null,
         offsetY: null,
+        velocityX: null,
+        velocityY: null,
         scaleSize: 1,
         scaleFactor: 1,
         dragging: false,
@@ -130,7 +132,6 @@
 
 <template>
   <canvas ref="map" width="900" height="600"
-    style="touch-action: none;"
     @mousedown="pressed"
     @mouseup="released"
     @mouseleave="released"
@@ -138,6 +139,14 @@
     @touchstart="pressed"
     @touchend="released"
     @touchmove="move"
-    @wheel="wheel">
+    @wheel="wheel"
+    @contextmenu.prevent>
   </canvas>
 </template>
+
+<style>
+  canvas {
+    touch-action: none;
+    cursor: grab;
+  }
+</style>
