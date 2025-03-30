@@ -10,13 +10,17 @@
       toggleSearchbar() {
         this.$refs.SearchBar.searchbarVisible = !this.$refs.SearchBar.searchbarVisible;
       },
-      showResult(data) {
-        //this.$refs.MapCanvas.showResult(data);
+      showResult(result) {
+        this.$refs.MapCanvas.showResult(result);
+      },
+      showDetail(loc) {
+        //this.$refs.?.showDetail(loc);
       },
     },
     provide() {
       return {
         showResult: this.showResult,
+        showDetail: this.showDetail,
       }
     },
   }
