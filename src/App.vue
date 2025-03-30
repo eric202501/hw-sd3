@@ -35,11 +35,23 @@
       </div>
       <SearchBar ref="SearchBar" />
     </header>
-    <main class="d-flex flex-grow-1 justify-content-center">
-      <MapCanvas ref="MapCanvas" />
+
+    <main class="container d-flex flex-grow-1 justify-content-center align-items-center my-5" >
+      <div class="d-flex rounded-4 overflow-hidden">
+        <MapCanvas />
+        
+      </div>
+
+      <div class="d-flex flex-column w-25 bg-light shadow p-3 rounded-3 gap-3"  >
+        <button class="btn btn-outline-primary w-100 py-3 fw-bold rounded-3">美食 Delicacies</button>
+        <button class="btn btn-outline-success w-100 py-3 fw-bold rounded-3">系所 Department</button>
+        <button class="btn btn-outline-warning w-100 py-3 fw-bold rounded-3">宿舍 Dormitory</button>
+        <button class="btn btn-outline-danger w-100 py-3 fw-bold rounded-3">行政 Administration</button>
+      </div>
     </main>
-    <footer class="bg-dark text-white text-center py-3">
-      <p class="m-0">Copyright © 2025 NCU Map</p>
+
+    <footer class="bg-dark text-white text-center mt-auto py-3">
+      <p class="m-0">Copyright &copy; 2025 NCU Map</p>
     </footer>
   </div>
 </template>
