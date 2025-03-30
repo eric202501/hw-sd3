@@ -1,14 +1,19 @@
 <script>
   import MapCanvas from './components/MapCanvas.vue';
   import SearchBar from './components/SearchBar.vue';
+  import ButtonMenu from './components/ButtonMenu.vue';
   export default {
     components: {
       MapCanvas,
       SearchBar,
+      ButtonMenu,
     },
     methods: {
-      toggleSearchbar() {
-        this.$refs.SearchBar.searchbarVisible = !this.$refs.SearchBar.searchbarVisible;
+      toggleSearchBar() {
+        this.$refs.SearchBar.visible = !this.$refs.SearchBar.visible;
+      },
+      toggleButtonMenu() {
+        this.$refs.ButtonMenu.visible = !this.$refs.ButtonMenu.visible;
       },
       showResult(result) {
         this.$refs.MapCanvas.showResult(result);
@@ -31,27 +36,19 @@
     <header class="bg-white shadow py-3">
       <div class="container d-flex justify-content-between">
         <a href="/" class="fs-2 text-black fw-bold m-0 px-2 text-decoration-none">NCU Map</a>
-        <button class="btn btn-link" @click="toggleSearchbar"><i class="bi-search fs-5 text-black"></i></button>
+        <div class="d-flex gap-2">
+          <button class="btn btn-link" @click="toggleSearchBar"><i class="bi bi-search fs-5 text-black"></i></button>
+          <button class="btn btn-link" @click="toggleButtonMenu"><i class="bi bi-list fs-5 text-black"></i></button>
+        </div>
       </div>
       <SearchBar ref="SearchBar" />
+      <ButtonMenu ref="ButtonMenu" />
     </header>
-
-    <main class="container d-flex flex-grow-1 justify-content-center align-items-center my-5" >
-      <div class="d-flex rounded-4 overflow-hidden">
-        <MapCanvas />
-        
-      </div>
-
-      <div class="d-flex flex-column w-25 bg-light shadow p-3 rounded-3 gap-3"  >
-        <button class="btn btn-outline-primary w-100 py-3 fw-bold rounded-3">美食 Delicacies</button>
-        <button class="btn btn-outline-success w-100 py-3 fw-bold rounded-3">系所 Department</button>
-        <button class="btn btn-outline-warning w-100 py-3 fw-bold rounded-3">宿舍 Dormitory</button>
-        <button class="btn btn-outline-danger w-100 py-3 fw-bold rounded-3">行政 Administration</button>
-      </div>
+    <main class="d-flex flex-grow-1 justify-content-center">
+      <MapCanvas ref="MapCanvas" />
     </main>
-
-    <footer class="bg-dark text-white text-center mt-auto py-3">
-      <p class="m-0">Copyright &copy; 2025 NCU Map</p>
+    <footer class="bg-dark text-white text-center py-3">
+      <p class="m-0">Copyright © 2025 NCU Map</p>
     </footer>
   </div>
 </template>
