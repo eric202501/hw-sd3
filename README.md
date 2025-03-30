@@ -53,7 +53,7 @@ Format: `Text\Plain`
 File: `.\src\components\MapCanvas.vue`
 
 ```
-...
+...a
 
 showResult(result) {
   // 程式碼

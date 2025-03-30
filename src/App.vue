@@ -8,20 +8,27 @@
       SearchBar,
       ButtonMenu,
     },
+    data() {
+      return {
+        searchbarVisible: false,
+        buttonMenuVisible: false,
+      };
+    },
     methods: {
       toggleSearchBar() {
-        this.$refs.SearchBar.visible = !this.$refs.SearchBar.visible;
+        this.searchbarVisible = !this.searchbarVisible;
       },
       toggleButtonMenu() {
-        this.$refs.ButtonMenu.visible = !this.$refs.ButtonMenu.visible;
+        this.buttonMenuVisible = !this.buttonMenuVisible;
       },
       showResult(result) {
         this.$refs.MapCanvas.showResult(result);
       },
       showDetail(loc) {
-        //this.$refs.?.showDetail(loc);
+        this.$refs.MapCanvas.showDetail?.(loc);
       },
     },
+
     provide() {
       return {
         showResult: this.showResult,
@@ -41,12 +48,15 @@
           <button class="btn btn-link" @click="toggleButtonMenu"><i class="bi bi-list fs-5 text-black"></i></button>
         </div>
       </div>
-      <SearchBar ref="SearchBar" />
-      <ButtonMenu ref="ButtonMenu" />
+      <SearchBar :visible="searchbarVisible" @close="searchbarVisible = false" />
+      <ButtonMenu :visible="buttonMenuVisible" @close="buttonMenuVisible = false" />
+
     </header>
+
     <main class="d-flex flex-grow-1 justify-content-center">
       <MapCanvas ref="MapCanvas" />
     </main>
+
     <footer class="bg-dark text-white text-center py-3">
       <p class="m-0">Copyright © 2025 NCU Map</p>
     </footer>
