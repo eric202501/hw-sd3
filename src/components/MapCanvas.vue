@@ -1,5 +1,6 @@
 <script>
   import mapImg from "@/assets/map.png"
+  import locData from "@/assets/data2.json"
   export default {
     data() {
       return {
@@ -13,17 +14,25 @@
         dragging: false,
         pinching: false,
         scaling: false,
+        pinOnDisplay: [],
+        pinPosition: [],
       };
     },
     mounted() {
       this.canvas = this.$refs.map;
+      this.pin = new Image();
+      this.pin.src = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='red'><path d='M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6'/></svg>"
       this.image = new Image();
       this.image.src = mapImg;
       this.image.onload = () => {
-        window.addEventListener('resize', this.resize);
+        this.canvas.addEventListener("mousemove", this.hover);
+        this.canvas.addEventListener("click", this.click);
+        this.canvas.addEventListener("touchend", this.touching);
+        window.addEventListener("resize", this.resize);
         this.resize();
       };
     },
+    inject: ["showDetail"],
     methods: {
       draw() {
         this.width = this.imageWidth * this.scaleSize;
@@ -33,11 +42,19 @@
         let ctx = this.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.drawImage(this.image, this.offsetX, this.offsetY, this.width, this.height);
+        this.pinPosition = [];
+        this.pinOnDisplay.forEach(loc => {
+          let pinX = this.offsetX + loc.x * this.scaleSize;
+          let pinY = this.offsetY + loc.y * this.scaleSize;
+          this.pinPosition.push({ name: loc.name, x1: pinX - 16, x2: pinX + 16, y1: pinY - 32, y2: pinY });
+          ctx.drawImage(this.pin, pinX - 16, pinY - 32, 32, 32);
+        });
       },
       resize() {
         this.touch = window.matchMedia("(pointer: coarse)").matches;
         this.canvas.width = this.canvas.clientWidth;
         this.canvas.height = this.canvas.clientHeight;
+        this.canvasRect = this.canvas.getBoundingClientRect();
         let imageScale = Math.max(this.canvas.width / this.image.width, this.canvas.height / this.image.height);
         this.imageWidth = this.image.width * imageScale;
         this.imageHeight = this.image.height * imageScale;
@@ -48,9 +65,11 @@
       distance(a, b) {
         return Math.sqrt((b.clientX - a.clientX) ** 2 + (b.clientY - a.clientY) ** 2);
       },
-      pressed(e) {
+      press(e) {
         e.preventDefault();
         if (this.touch) {
+          this.touchedTime = Date.now();
+          this.touches = e.touches;
           if (e.touches.length > 1) {
             this.pinching = true;
             this.lastDistance = this.distance(e.touches[0], e.touches[1]);
@@ -61,7 +80,7 @@
         this.lastX = e.clientX;
         this.lastY = e.clientY;
       },
-      released() {
+      release() {
         this.pinching = false;
         this.dragging = false;
         requestAnimationFrame(this.drift);
@@ -75,8 +94,8 @@
             this.lastDistance = newDistance;
             let centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
             let centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-            this.offsetX = centerX - ((centerX - this.offsetX) / this.scaleSize) * this.scaleFactor;
-            this.offsetY = centerY - ((centerY - this.offsetY) / this.scaleSize) * this.scaleFactor;
+            this.offsetX = centerX - ((centerX - this.offsetX) * this.scaleFactor) / this.scaleSize;
+            this.offsetY = centerY - ((centerY - this.offsetY) * this.scaleFactor) / this.scaleSize;
             this.scaleSize = this.scaleFactor;
             this.draw();
           }
@@ -120,14 +139,14 @@
       },
       scale() {
         if (this.dragging) return;
-        let moveDeltaX = this.targetX - this.offsetX;
-        let moveDeltaY = this.targetY - this.offsetY;
-        let scaleDelta = this.scaleFactor - this.scaleSize;
-        this.offsetX += moveDeltaX * 0.1;
-        this.offsetY += moveDeltaY * 0.1;
-        this.scaleSize += scaleDelta * 0.1;
+        let deltaX = this.targetX - this.offsetX;
+        let deltaY = this.targetY - this.offsetY;
+        let deltaScale = this.scaleFactor - this.scaleSize;
+        this.offsetX += deltaX * 0.1;
+        this.offsetY += deltaY * 0.1;
+        this.scaleSize += deltaScale * 0.1;
         this.draw();
-        if (Math.abs(moveDeltaX) > 0.01 || Math.abs(moveDeltaY) > 0.01 || Math.abs(scaleDelta) > 0.01) {
+        if (Math.abs(deltaX) > 0.01 || Math.abs(deltaY) > 0.01 || Math.abs(deltaScale) > 0.01) {
           requestAnimationFrame(this.scale);
         } else {
           this.offsetX = this.targetX;
@@ -135,20 +154,60 @@
           this.scaleSize = this.scaleFactor;
         }
       },
+      showResult(result) {
+        this.pinOnDisplay = [];
+        result.forEach(name => {
+          locData.forEach(loc => {
+            if (loc.name == name) {
+              this.pinOnDisplay.push({ name: loc.name, x: loc.position[0], y: loc.position[1] });
+            }
+          });
+        });
+        this.draw();
+      },
+      hover(e) {
+        if (this.dragging) return;
+        let x = e.clientX - this.canvasRect.left;
+        let y = e.clientY - this.canvasRect.top;
+        this.hovering = false;
+        this.pinPosition.forEach((loc) => {
+          if (x > loc.x1 && x < loc.x2 && y > loc.y1 && y < loc.y2) {
+            this.hovering = true;
+            this.hovered = loc.name;
+          }
+        });
+      },
+      click(e) {
+        if (this.hovering) this.showDetail(this.hovered);
+      },
+      touching() {
+        if ((Date.now() - this.touchedTime) > 300) return;
+        let x = this.touches[0].clientX - this.canvasRect.left;
+        let y = this.touches[0].clientY - this.canvasRect.top;
+        let touched = null;
+        this.pinPosition.forEach((loc) => {
+          if (x > loc.x1 && x < loc.x2 && y > loc.y1 && y < loc.y2) {
+            touched = loc.name;
+          }
+        });
+        if (touched) this.showDetail(touched);
+      },
     },
   };
 </script>
 
 <template>
   <div class="canvas-container d-flex mt-4 mb-3 rounded-3 overflow-hidden">
-    <canvas ref="map" class="w-100 h-100"
-      @mousedown="pressed"
-      @mouseup="released"
-      @mouseleave="released"
+    <canvas ref="map"
+      :class="['w-100', 'h-100', 'touch-none',
+        hovering ? 'cursor-pointer' : (dragging ? 'cursor-grabbing' : 'cursor-grab')]"
+      @mousedown="press"
+      @mouseup="release"
+      @mouseleave="release"
       @mousemove="move"
       @wheel="wheel"
-      @touchstart="pressed"
-      @touchend="released"
+      @touchstart="press"
+      @touchend="release"
       @touchmove="move"
       @contextmenu.prevent>
     </canvas>

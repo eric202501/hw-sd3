@@ -1,25 +1,29 @@
 <script>
-export default {
-  data() {
-    return {
-      searchbarVisible: false,
-      searchInput: null,
-    };
-  },
-  methods: {
-    search() {
-      if (this.searchInput) {
-        // 搜尋功能
-      }
+  export default {
+    data() {
+      return {
+        searchbarVisible: false,
+        searchInput: null,
+      };
     },
-  },
-}
+    inject: ['showResult'],
+    methods: {
+      search() {
+        if (this.searchInput) {
+          this.searchbarVisible = false;
+          // 程式碼
+          this.showResult([this.searchInput]);
+        }
+      },
+    },
+  }
 </script>
 
 <template>
   <transition name="searchbar">
     <div v-if="searchbarVisible" class="d-flex position-absolute w-100 mt-4 px-5">
-      <input type="text" placeholder="搜尋地點或資訊" class="search-input form-control" v-model="searchInput"
+      <input type="text" placeholder="搜尋地點或資訊"
+        class="search-input form-control" v-model="searchInput"
         @keydown.enter="search" />
     </div>
   </transition>
