@@ -1,6 +1,9 @@
 <script>
   import mapImg from "@/assets/map.png"
   import locData from "@/assets/data2.json"
+  import * as bootstrap from 'bootstrap';
+  import 'bootstrap/dist/css/bootstrap.min.css';
+
   export default {
     data() {
       return {
@@ -16,6 +19,7 @@
         scaling: false,
         pinOnDisplay: [],
         pinPosition: [],
+        hovered: null
       };
     },
     mounted() {
@@ -46,8 +50,17 @@
         this.pinOnDisplay.forEach(loc => {
           let pinX = this.offsetX + loc.x * this.scaleSize;
           let pinY = this.offsetY + loc.y * this.scaleSize;
-          this.pinPosition.push({ name: loc.name, x1: pinX - 16, x2: pinX + 16, y1: pinY - 32, y2: pinY });
-          ctx.drawImage(this.pin, pinX - 16, pinY - 32, 32, 32);
+          let isHovered = (loc.name === this.hovered);
+          let size = isHovered ? 40 : 32;
+          let offset = size / 2;
+          this.pinPosition.push({
+        name: loc.name,
+        x1: pinX - offset,
+        x2: pinX + offset,
+        y1: pinY - size,
+        y2: pinY
+      });
+          ctx.drawImage(this.pin, pinX - offset, pinY - size, size, size);
         });
       },
       resize() {
@@ -169,13 +182,13 @@
         if (this.dragging) return;
         let x = e.clientX - this.canvasRect.left;
         let y = e.clientY - this.canvasRect.top;
-        this.hovering = false;
+        this.hovered = null;
         this.pinPosition.forEach((loc) => {
           if (x > loc.x1 && x < loc.x2 && y > loc.y1 && y < loc.y2) {
-            this.hovering = true;
             this.hovered = loc.name;
           }
         });
+        this.draw();
       },
       click(e) {
         if (this.hovering) this.showDetail(this.hovered);
@@ -193,11 +206,29 @@
         if (touched) this.showDetail(touched);
       },
     },
+    watch: {
+      pinPosition(newVal) {
+      this.$nextTick(() => {
+        console.log("pinPosition updated:", newVal);
+        document.querySelectorAll('.tooltip').forEach(el => el.remove());
+        const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(el => {
+          const instance = bootstrap.Tooltip.getInstance(el);
+          if (instance) {
+            instance.dispose();
+          }
+          const newInstance = new bootstrap.Tooltip(el, { container: 'body' });
+          console.log("Tooltip created for:", el, "=>", newInstance);
+          newInstance.show();
+        });
+      });
+    }
+  },
   };
 </script>
 
 <template>
-  <div class="canvas-container d-flex mt-4 mb-3 rounded-3 overflow-hidden">
+  <div class="canvas-container position-relative d-flex mt-4 mb-3 rounded-3 overflow-hidden">
     <canvas ref="map"
       :class="['w-100', 'h-100', 'touch-none',
         hovering ? 'cursor-pointer' : (dragging ? 'cursor-grabbing' : 'cursor-grab')]"
@@ -211,6 +242,19 @@
       @touchmove="move"
       @contextmenu.prevent>
     </canvas>
+    <div
+    v-for="(pin, index) in pinPosition"
+    :key="pin.name"  
+    class="pin-tooltip position-absolute"
+    :style="{
+      left: `${pin.x1 + 16}px`,
+      top: `${pin.y1 + 8}px`,
+      transform: 'translate(-50%, -60%)',
+    }"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    :title="pin.name"
+></div>
   </div>
 </template>
 
@@ -219,6 +263,16 @@
     max-width: 95%;
     max-height: 95%;
   }
+  canvas {
+  z-index: 0;
+  position: relative;
+  }
+  .pin-tooltip {
+  width: 40px;
+  height: 40px;
+  z-index: 100;
+  pointer-events: none;
+}
   @media (min-width: 768px) {
     .canvas-container {
       width: 900px;
