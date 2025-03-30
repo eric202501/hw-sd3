@@ -2,28 +2,30 @@
   export default {
     data() {
       return {
-        searchbarVisible: false,
-        searchInput: null,
+        visible: false,
+        input: null,
       };
     },
     inject: ['showResult'],
     methods: {
       search() {
-        if (this.searchInput) {
-          this.searchbarVisible = false;
-          // 程式碼
-          this.showResult([this.searchInput]);
+        if (this.searchInput && this.searchInput.trim() !== '') {
+          const keyword = this.searchInput.trim();
+          this.showResult([keyword]);  
+          this.$emit('close');        
+          this.searchInput = '';       
         }
-      },
+      }
+
     },
   }
 </script>
 
 <template>
   <transition name="searchbar">
-    <div v-if="searchbarVisible" class="d-flex position-absolute w-100 mt-4 px-5">
+    <div v-if="visible" class="d-flex position-absolute w-100 mt-4 px-5">
       <input type="text" placeholder="搜尋地點或資訊"
-        class="search-input form-control" v-model="searchInput"
+        class="search-input form-control" v-model="input"
         @keydown.enter="search" />
     </div>
   </transition>
