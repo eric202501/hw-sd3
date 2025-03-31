@@ -1,6 +1,16 @@
 # NCU Map
 中央大學地標搜尋
 
+JS前端框架：Vue.js
+CSS框架：Bootstrap
+
+分工：
+汪宸宇：分類按鈕、點擊顯示、搜尋功能
+
+羅宣祐：地標資料蒐集、顯示詳細資訊
+
+楊昊：網頁架構、地圖Canvas顯示
+
 ## DATA格式
 
 JSON 在/src/assets 
