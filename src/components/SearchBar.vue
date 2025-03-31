@@ -34,3 +34,25 @@ export default {
     </div>
   </transition>
 </template>
+
+
+<style scoped>
+  .search-input {
+    box-shadow: 0 -1rem 2rem 2rem rgba(0, 0, 0, .3);
+    clip-path: inset(-0.5rem -5rem -5rem -5rem);
+    z-index: 200;
+  }
+  .searchbar-enter-active, .searchbar-leave-active {
+    transition: max-height 0.15s ease-out, opacity 0.15s ease-out;
+  }
+  .searchbar-enter-from, .searchbar-leave-to {
+    max-height: 0;
+    opacity: 0;
+  }
+  .searchbar-enter-to, .searchbar-leave-from {
+    max-height: 5rem;
+    opacity: 1;
+  }
+
+
+</style>
