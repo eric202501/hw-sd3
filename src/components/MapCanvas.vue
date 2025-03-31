@@ -1,5 +1,5 @@
 <template>
-  <div class="canvas-container d-flex mt-4 mb-3 rounded-3 overflow-hidden">
+  <div class="canvas-container position-relative d-flex mt-4 mb-3 rounded-3 overflow-hidden">
     <canvas ref="map"
       :class="['w-100', 'h-100', 'touch-none',
         hovering ? 'cursor-pointer' : (dragging ? 'cursor-grabbing' : 'cursor-grab')]"
@@ -13,12 +13,27 @@
       @touchmove="move"
       @contextmenu.prevent>
     </canvas>
+    <div
+    v-for="(pin, index) in pinPosition"
+    :key="pin.name"
+    class="pin-tooltip position-absolute"
+    :style="{
+      left: `${pin.canvasX}px`,
+      top: `${pin.canvasY}px`,
+      transform: 'translate(-50%, -100%)',
+    }"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    :title="pin.name"
+></div>
   </div>
 </template>
 
 <script>
 import mapImg from "@/assets/map.png";
 import locData from "@/assets/data2.json";
+import * as bootstrap from 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default {
   data() {
@@ -38,6 +53,9 @@ export default {
       hovering: false,
       pinOnDisplay: [],
       pinPosition: [],
+      hovered: null,
+      tooltipState: {}
+      
     };
   },
   inject: ["showDetail"],
@@ -68,6 +86,41 @@ export default {
     };
   },
   methods: {
+    
+    updateAllTooltips() {
+      const containerRect = document.querySelector('.canvas-container').getBoundingClientRect();
+      const tooltipEls = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      tooltipEls.forEach(el => {
+      const instance = bootstrap.Tooltip.getInstance(el);
+      if (instance) {
+        instance.update();
+        const refRect = el.getBoundingClientRect();
+        const tip = instance.tip;
+        const inRange = !(refRect.right < containerRect.left ||
+                          refRect.left > containerRect.right ||
+                          refRect.bottom < containerRect.top ||
+                          refRect.top > containerRect.bottom);
+
+        const key = el.getAttribute('data-bs-original-title') || '';
+        if (this.tooltipState[key] === undefined) {
+        this.tooltipState[key] = true;
+      }
+        if (inRange) {
+          if (!this.tooltipState[key]) {
+            instance.show();
+            this.tooltipState[key] = true;
+          }
+        } 
+        else {
+            if (this.tooltipState[key]) {
+              instance.hide();
+              this.tooltipState[key] = false;
+            }
+          
+}
+      }
+    });
+  },
     draw() {
       if (!this.canvas || !this.image || !this.image.width || !this.image.height) return;
 
@@ -87,14 +140,21 @@ export default {
       this.pinOnDisplay.forEach(loc => {
         let pinX = this.offsetX + loc.x * this.scaleSize;
         let pinY = this.offsetY + loc.y * this.scaleSize;
+        let isHovered = (loc.name === this.hovered);
+        let size = isHovered ? 40 : 32;
+        let offset = size / 2;
+
         this.pinPosition.push({
-          name: loc.name,
-          x1: pinX - 16,
-          x2: pinX + 16,
-          y1: pinY - 32,
-          y2: pinY,
+            name: loc.name,
+            canvasX: pinX,
+            canvasY: pinY,
+            x1: pinX - offset,
+            x2: pinX + offset,
+            y1: pinY - size,
+            y2: pinY,
         });
-        ctx.drawImage(this.pin, pinX - 16, pinY - 32, 32, 32);
+       
+        ctx.drawImage(this.pin, pinX - offset, pinY - size, size, size);
       });
     },
     resize() {
@@ -154,6 +214,7 @@ export default {
         this.offsetY = centerY - ((centerY - this.offsetY) * this.scaleFactor) / this.scaleSize;
         this.scaleSize = this.scaleFactor;
         this.draw();
+        
         return;
       }
       if (this.dragging) {
@@ -166,6 +227,7 @@ export default {
         this.lastX = e.clientX;
         this.lastY = e.clientY;
         this.draw();
+     
       }
     },
     wheel(e) {
@@ -191,7 +253,10 @@ export default {
       } else {
         this.velocityX = 0;
         this.velocityY = 0;
+        
       }
+      this.updateAllTooltips();
+      
     },
     scale() {
       if (!this.image || this.dragging) return;
@@ -209,6 +274,8 @@ export default {
         this.offsetY = this.targetY;
         this.scaleSize = this.scaleFactor;
       }
+      this.updateAllTooltips();
+      
     },
     distance(a, b) {
       return Math.sqrt((b.clientX - a.clientX) ** 2 + (b.clientY - a.clientY) ** 2);
@@ -239,21 +306,69 @@ export default {
       }));
   }
 
-  this.draw();
-}
-      },
+
+      this.draw();
+    },
+    hover(e) {
+      if (this.dragging) return;
+      let x = e.clientX - this.canvasRect.left;
+      let y = e.clientY - this.canvasRect.top;
+      this.hovered = null;
+      this.pinPosition.forEach((loc) => {
+        if (x > loc.x1 && x < loc.x2 && y > loc.y1 && y < loc.y2) {
+          this.hovered = loc.name;
+        }
+      });
+      this.draw();
+    },
+    click(e) {
+        if (this.hovering) this.showDetail(this.hovered);
+    },
+
+  },
+    watch: {
+    pinOnDisplay(newVal, oldVal) {
+      if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+        this.$nextTick(() => {
+          document.querySelectorAll('.tooltip').forEach(el => el.remove());
+          const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+          tooltipTriggerList.forEach(el => {
+            const instance = bootstrap.Tooltip.getInstance(el);
+            if (instance) {
+              instance.dispose();
+            }
+            const newInstance = new bootstrap.Tooltip(el);
+            newInstance.show();
+          });
+        });
+      }
+    }
+  }
+  
 };
 </script>
 
 <style scoped>
+
 .canvas-container {
-  max-width: 95%;
-  max-height: 95%;
-}
-@media (min-width: 768px) {
-  .canvas-container {
-    width: 900px;
-    height: 600px;
+    max-width: 95%;
+    max-height: 95%;
   }
+  canvas {
+  z-index: 0;
+  position: relative;
+  }
+  .pin-tooltip {
+  width: 40px;
+  height: 40px;
+  z-index: 150;
+  pointer-events: none;
+  
 }
+  @media (min-width: 768px) {
+    .canvas-container {
+      width: 900px;
+      height: 600px;
+    }
+  }
 </style>
