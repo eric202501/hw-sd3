@@ -214,22 +214,33 @@ export default {
       return Math.sqrt((b.clientX - a.clientX) ** 2 + (b.clientY - a.clientY) ** 2);
     },
     showResult(result) {
-    
-      const keyword = result[0]?.toLowerCase();
+  
+  if (result.length === 1) {
+    const keyword = result[0].toLowerCase();
 
-      this.pinOnDisplay = locData.filter(loc => {
-        const nameMatch = loc.name.toLowerCase().includes(keyword);
-        const introMatch = loc.intro?.toLowerCase().includes(keyword);
-        const tagMatch = loc.tag?.some(tag => tag.toLowerCase().includes(keyword));
-        return nameMatch || introMatch || tagMatch;
-      }).map(loc => ({
+    this.pinOnDisplay = locData.filter(loc => {
+      const inName = loc.name.toLowerCase().includes(keyword);
+      const inIntro = loc.intro?.toLowerCase().includes(keyword);
+      const inTag = loc.tag?.some(tag => tag.toLowerCase().includes(keyword));
+      return inName || inIntro || inTag;
+    }).map(loc => ({
+      name: loc.name,
+      x: loc.position[0],
+      y: loc.position[1]
+    }));
+  } 
+  else {
+    this.pinOnDisplay = locData
+      .filter(loc => result.includes(loc.name))
+      .map(loc => ({
         name: loc.name,
         x: loc.position[0],
-        y: loc.position[1],
+        y: loc.position[1]
       }));
+  }
 
-      this.draw();
-    }
+  this.draw();
+}
       },
 };
 </script>

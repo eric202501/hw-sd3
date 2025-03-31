@@ -1,4 +1,6 @@
 <script>
+import locData from "@/assets/data2.json"; // 匯入地標數據
+
 export default {
   props: {
     visible: Boolean
@@ -10,28 +12,25 @@ export default {
 
       switch (e.target.innerHTML.trim()) {
         case "美食 Delicacies":
-          classifyCode = "0";
-          break;
+          classifyCode = "0"; break;
         case "系所 Department":
-          classifyCode = "1";
-          break;
-        case "宿舍 Dormitory":
-          classifyCode = "2";
-          break;
+          classifyCode = "1"; break;
         case "行政 Administration":
-          classifyCode = "3";
-          break;
+          classifyCode = "2"; break;
+        case "宿舍 Dormitory":
+          classifyCode = "3"; break;
         default:
-          return; 
+          return;
       }
 
       const result = locData
-        .filter(loc => loc.classify.includes(classifyCode))
+        .filter(loc => loc.classify?.includes(classifyCode))
         .map(loc => loc.name);
 
       this.showResult(result);
       this.$emit('close');
     }
+
   }
 };
 </script>
@@ -45,17 +44,15 @@ export default {
   </div>
 </template>
 
-
 <style scoped>
 .button-menu {
   position: absolute;
   margin-top: 2rem;
-  right: 0px;          
+  right: 0px;
 }
 
 .button-menu button:hover {
   color: #000000;
- 
 }
 @media (max-width: 768px) {
   .button-menu {
