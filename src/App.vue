@@ -3,12 +3,14 @@
   import SearchBar from "./components/SearchBar.vue";
   import ButtonMenu from "./components/ButtonMenu.vue";
   import DetailCard from "./components/DetailCard.vue";
+  import WelcomePage from "./components/WelcomePage.vue";
   export default {
     components: {
       MapCanvas,
       SearchBar,
       ButtonMenu,
       DetailCard,
+      WelcomePage,
     },
     methods: {
       toggleSearchBar() {
@@ -35,6 +37,7 @@
 
 <template>
   <div class="d-flex flex-column h-100">
+    <WelcomePage />
     <header class="bg-white shadow py-3">
       <div class="container d-flex justify-content-between">
         <a href="/" class="d-flex fs-2 text-black font-monospace fw-bold lh-2 m-0 px-2 align-items-center text-decoration-none">NCU Map</a>

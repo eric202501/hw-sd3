@@ -1,20 +1,20 @@
 <script>
-import locData from "@/assets/data.json";
-export default {
-  data() {
-    return {
-      visible: false,
-      imageSrc: import.meta.glob('@/assets/img/*.jpg'),
-    };
-  },
-  methods: {
-    async showDetail(name) {
-      this.loc = locData.find(loc => loc.name == name);
-      this.img = (await this.imageSrc[this.loc.pic]?.())?.default;
-      this.visible = true;
+  import locData from "@/assets/data.json";
+  export default {
+    data() {
+      return {
+        visible: false,
+        imageSrc: import.meta.glob('@/assets/img/*'),
+      };
     },
-  },
-}
+    methods: {
+      async showDetail(name) {
+        this.loc = locData.find(loc => loc.name == name);
+        this.image = (await this.imageSrc[this.loc.pic]?.())?.default;
+        this.visible = true;
+      },
+    },
+  }
 </script>
 
 <template>
@@ -23,10 +23,10 @@ export default {
       <div class="detail-card position-fixed z-1 d-flex flex-column flex-md-row p-5 align-items-start bg-white rounded-4 shadow-lg">
         <div class="d-flex flex-column">
           <div class="image-container d-flex ratio ratio-1x1 align-items-center justify-content-center rounded-3 shadow-sm overflow-hidden">
-            <img :src="img" class="w-100 h-100 object-fit-cover" />
+            <img :src="image" class="w-100 h-100 object-fit-cover" />
           </div>
           <div class="d-flex flex-wrap mt-4 gap-2 overflow-hidden">
-            <div v-for="(tag, index) in loc.tag" :key="index" class="badge bg-secondary fs-6 cursor-pointer">{{ tag }}</div>
+            <div v-for="tag in loc.tag" class="badge bg-secondary fs-6 cursor-pointer">{{ tag }}</div>
           </div>
         </div>
         <div class="flex-grow-1 mt-3 ms-md-4 text-start">
@@ -58,11 +58,9 @@ export default {
   .DetailCard-enter-active, .DetailCard-leave-active {
     transition: opacity 0.15s ease-in-out;
   }
-
   .DetailCard-enter, .DetailCard-leave-to {
     opacity: 0;
   }
-
   .DetailCard-enter-to, .DetailCard-leave {
     opacity: 1;
   }
