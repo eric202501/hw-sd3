@@ -1,6 +1,6 @@
 <script>
-  import mapImg from "@/assets/map.png"
-  import locData from "@/assets/data2.json"
+  import mapImg from "@/assets/map.png";
+  import locData from "@/assets/data.json";
   export default {
     data() {
       return {
@@ -13,6 +13,7 @@
         scaleFactor: 1,
         dragging: false,
         pinching: false,
+        hovering: false,
         scaling: false,
         pinOnDisplay: [],
         pinPosition: [],
@@ -29,6 +30,7 @@
         this.canvas.addEventListener("click", this.click);
         this.canvas.addEventListener("touchend", this.touching);
         window.addEventListener("resize", this.resize);
+        document.addEventListener("wheel", this.draw);
         this.resize();
       };
     },
@@ -42,12 +44,13 @@
         let ctx = this.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.drawImage(this.image, this.offsetX, this.offsetY, this.width, this.height);
-        this.pinPosition = [];
-        this.pinOnDisplay.forEach(loc => {
+        this.pinPosition = this.pinOnDisplay.map(loc => {
           let pinX = this.offsetX + loc.x * this.scaleSize;
           let pinY = this.offsetY + loc.y * this.scaleSize;
-          this.pinPosition.push({ name: loc.name, x1: pinX - 16, x2: pinX + 16, y1: pinY - 32, y2: pinY });
-          ctx.drawImage(this.pin, pinX - 16, pinY - 32, 32, 32);
+          return { name: loc.name, x1: pinX - 16, x2: pinX + 16, y1: pinY - 32, y2: pinY };
+        });
+        this.pinPosition.forEach(pin => {
+          ctx.drawImage(this.pin, pin.x1, pin.y1, 32, 32);
         });
       },
       resize() {
@@ -66,8 +69,8 @@
         return Math.sqrt((b.clientX - a.clientX) ** 2 + (b.clientY - a.clientY) ** 2);
       },
       press(e) {
-        e.preventDefault();
-        if (this.touch) {
+        if (this.touch && e.touches) {
+          e.preventDefault()
           this.touchedTime = Date.now();
           this.touches = e.touches;
           if (e.touches.length > 1) {
@@ -86,7 +89,7 @@
         requestAnimationFrame(this.drift);
       },
       move(e) {
-        if (this.touch) {
+        if (this.touch && e.touches) {
           if (this.pinching) {
             let newDistance = this.distance(e.touches[0], e.touches[1]);
             this.scaleFactor *= newDistance / this.lastDistance;
@@ -155,20 +158,14 @@
         }
       },
       showResult(result) {
-        this.pinOnDisplay = [];
-        result.forEach(name => {
-          locData.forEach(loc => {
-            if (loc.name == name) {
-              this.pinOnDisplay.push({ name: loc.name, x: loc.position[0], y: loc.position[1] });
-            }
-          });
-        });
+        this.pinOnDisplay = locData.filter(loc => result.includes(loc.name))
+          .map(loc => ({ name: loc.name, x: loc.position.x, y: loc.position.y }));
         this.draw();
       },
       hover(e) {
         if (this.dragging) return;
-        let x = e.clientX - this.canvasRect.left;
-        let y = e.clientY - this.canvasRect.top;
+        let x = e.clientX - this.canvasRect.left + window.scrollX;
+        let y = e.clientY - this.canvasRect.top + window.scrollY;
         this.hovering = false;
         this.pinPosition.forEach((loc) => {
           if (x > loc.x1 && x < loc.x2 && y > loc.y1 && y < loc.y2) {
@@ -181,9 +178,10 @@
         if (this.hovering) this.showDetail(this.hovered);
       },
       touching() {
-        if ((Date.now() - this.touchedTime) > 300) return;
-        let x = this.touches[0].clientX - this.canvasRect.left;
-        let y = this.touches[0].clientY - this.canvasRect.top;
+        if (!this.touches) return;
+        if ((Date.now() - this.touchedTime) > 500) return;
+        let x = this.touches[0].clientX - this.canvasRect.left + window.scrollX;
+        let y = this.touches[0].clientY - this.canvasRect.top  + window.scrollY;
         let touched = null;
         this.pinPosition.forEach((loc) => {
           if (x > loc.x1 && x < loc.x2 && y > loc.y1 && y < loc.y2) {

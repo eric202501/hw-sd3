@@ -1,12 +1,14 @@
 <script>
-  import MapCanvas from './components/MapCanvas.vue';
-  import SearchBar from './components/SearchBar.vue';
-  import ButtonMenu from './components/ButtonMenu.vue';
+  import MapCanvas from "./components/MapCanvas.vue";
+  import SearchBar from "./components/SearchBar.vue";
+  import ButtonMenu from "./components/ButtonMenu.vue";
+  import DetailCard from "./components/DetailCard.vue";
   export default {
     components: {
       MapCanvas,
       SearchBar,
       ButtonMenu,
+      DetailCard,
     },
     methods: {
       toggleSearchBar() {
@@ -18,8 +20,8 @@
       showResult(result) {
         this.$refs.MapCanvas.showResult(result);
       },
-      showDetail(loc) {
-        //this.$refs.?.showDetail(loc);
+      showDetail(name) {
+        this.$refs.DetailCard.showDetail(name);
       },
     },
     provide() {
@@ -35,7 +37,7 @@
   <div class="d-flex flex-column h-100">
     <header class="bg-white shadow py-3">
       <div class="container d-flex justify-content-between">
-        <a href="/" class="fs-2 text-black fw-bold m-0 px-2 text-decoration-none">NCU Map</a>
+        <a href="/" class="d-flex fs-2 text-black font-monospace fw-bold lh-2 m-0 px-2 align-items-center text-decoration-none">NCU Map</a>
         <div class="d-flex gap-2">
           <button class="btn btn-link" @click="toggleSearchBar"><i class="bi bi-search fs-5 text-black"></i></button>
           <button class="btn btn-link" @click="toggleButtonMenu"><i class="bi bi-list fs-5 text-black"></i></button>
@@ -48,7 +50,8 @@
       <MapCanvas ref="MapCanvas" />
     </main>
     <footer class="bg-dark text-white text-center py-3">
-      <p class="m-0">Copyright © 2025 NCU Map</p>
+      <p class="font-monospace m-0">Copyright © 2025 NCU Map</p>
     </footer>
+    <DetailCard ref="DetailCard" />
   </div>
 </template>

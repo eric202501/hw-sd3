@@ -9,10 +9,10 @@
     "classify": [
       "0"
     ],
-    "pic": "/assets/img/9restaurant_1.jpg",
-    "Position": {
-      "x": 837.9285714937828,
-      "y": 106.41033674073975
+    "pic": "/src/assets/img/9restaurant_1.jpg",
+    "position": {
+      "x": 838,
+      "y": 106
     }
   },
   {
@@ -25,10 +25,10 @@
     "classify": [
       "0"
     ],
-    "pic": "/assets/img/guoRestaurant_1.jpg",
-    "Position": {
-      "x": 819.9469863959324,
-      "y": 541.2602505867769
+    "pic": "/src/assets/img/guoRestaurant_1.jpg",
+    "position": {
+      "x": 820,
+      "y": 541
     }
   },
   {
@@ -41,14 +41,14 @@
     "classify": [
       "0"
     ],
-    "pic": "/assets/img/songYuan_1.jpg",
-    "Position": {
-      "x": 454.69045010268445,
-      "y": 406.35784567327505
+    "pic": "/src/assets/img/songYuan_1.jpg",
+    "position": {
+      "x": 455,
+      "y": 406
     }
   },
   {
-    "name": "LS人文社會科學大樓",
+    "name": "LS文三",
     "intro": "人文社會科學大樓又名「文三」，鄰近《大象五形》的入口處，還有黑盒子咖啡提供飲料與輕食，但記得飲料與食物不可以帶進107電影院及黑盒子劇場喔！另哲學研究所、歷史研究所、學習與教學研究所及通識教育中心辦公室也設在文三館。",
     "tag": [
       "文學院",
@@ -56,15 +56,16 @@
       "咖啡廳",
       "黑盒子劇場",
       "學習與教學研究所",
-      "通識教育中心辦公室"
+      "通識教育中心辦公室",
+      "文三"
     ],
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/ls_1.jpg",
-    "Position": {
-      "x": 803.7787615482744,
-      "y": 211.55230254242656
+    "pic": "/src/assets/img/ls_1.jpg",
+    "position": {
+      "x": 804,
+      "y": 212
     }
   },
   {
@@ -85,10 +86,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/thumb_large.jpg",
-    "Position": {
-      "x": 751.6359044054174,
-      "y": 210.480873970998
+    "pic": "/src/assets/img/thumb_large.jpg",
+    "position": {
+      "x": 752,
+      "y": 210
     }
   },
   {
@@ -109,14 +110,14 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/c2_1.jpg",
-    "Position": {
-      "x": 754.1359044054173,
-      "y": 251.1951596852837
+    "pic": "/src/assets/img/c2_1.jpg",
+    "position": {
+      "x": 754,
+      "y": 251
     }
   },
   {
-    "name": "I志希館（管理一館）",
+    "name": "I志希館",
     "intro": "位於綜教館旁，志希館又為管理學院一館，除一樓的電子計算機中心，其餘樓層為管理學院院辦公室及各研究室。",
     "tag": [
       "管理學院",
@@ -128,16 +129,17 @@
       "產經所",
       "人資所",
       "工管所",
-      "會研所"
+      "會研所",
+      "管理一館"
     ],
     "classify": [
       "1",
       "3"
     ],
-    "pic": "/assets/img/m_1.jpg",
-    "Position": {
-      "x": 678.0000000000001,
-      "y": 128.2499999999999
+    "pic": "/src/assets/img/m_1.jpg",
+    "position": {
+      "x": 678,
+      "y": 128
     }
   },
   {
@@ -157,10 +159,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/m_2.jpg",
-    "Position": {
-      "x": 682.0000000000002,
-      "y": 71.74999999999993
+    "pic": "/src/assets/img/m_2.jpg",
+    "position": {
+      "x": 682,
+      "y": 72
     }
   },
   {
@@ -175,10 +177,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/s5_2.jpg",
-    "Position": {
-      "x": 612.2329813753137,
-      "y": 20.71618445537914
+    "pic": "/src/assets/img/s5_2.jpg",
+    "position": {
+      "x": 612,
+      "y": 21
     }
   },
   {
@@ -191,10 +193,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/math.jpg",
-    "Position": {
-      "x": 606.3140715309196,
-      "y": 79.90528289931954
+    "pic": "/src/assets/img/math.jpg",
+    "position": {
+      "x": 606,
+      "y": 80
     }
   },
   {
@@ -208,29 +210,30 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/o.jpg",
-    "Position": {
-      "x": 620.4283950060131,
-      "y": 131.3542684698216
+    "pic": "/src/assets/img/o.jpg",
+    "position": {
+      "x": 620,
+      "y": 131
     }
   },
   {
-    "name": "S4健雄館（科學四館）",
+    "name": "S4科學四館",
     "intro": "樓層分布：\n中壢福衛地面站(十樓)、天文研究所(九、十樓)、太空科學研究所(八、九樓)、物理學系 (一~七樓)",
     "tag": [
       "物理系",
       "太空系",
       "天文所",
       "地科院",
-      "理學院"
+      "理學院",
+      "健雄館"
     ],
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/s4_1.jpg",
-    "Position": {
-      "x": 534.0115245657274,
-      "y": 21.28654563366611
+    "pic": "/src/assets/img/s4_1.jpg",
+    "position": {
+      "x": 534,
+      "y": 21
     }
   },
   {
@@ -245,10 +248,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/s2_1.jpg",
-    "Position": {
-      "x": 562.1153299121363,
-      "y": 90.85042025349001
+    "pic": "/src/assets/img/s2_1.jpg",
+    "position": {
+      "x": 562,
+      "y": 91
     }
   },
   {
@@ -261,10 +264,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/s_2.png",
-    "Position": {
-      "x": 559.8892859243019,
-      "y": 144.7769571214447
+    "pic": "/src/assets/img/s_2.png",
+    "position": {
+      "x": 560,
+      "y": 145
     }
   },
   {
@@ -281,10 +284,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/hk.jpg",
-    "Position": {
-      "x": 423.65670233460116,
-      "y": 61.81487163459327
+    "pic": "/src/assets/img/hk.jpg",
+    "position": {
+      "x": 424,
+      "y": 62
     }
   },
   {
@@ -297,10 +300,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/light.jpg",
-    "Position": {
-      "x": 430.65670233460116,
-      "y": 124.51542981104497
+    "pic": "/src/assets/img/light.jpg",
+    "position": {
+      "x": 431,
+      "y": 125
     }
   },
   {
@@ -315,10 +318,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/s_1.jpg",
-    "Position": {
-      "x": 753.6362354153487,
-      "y": 387.7823153579074
+    "pic": "/src/assets/img/s_1.jpg",
+    "position": {
+      "x": 754,
+      "y": 388
     }
   },
   {
@@ -333,10 +336,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/e_1.jpg",
-    "Position": {
-      "x": 606.9078192813346,
-      "y": 374.96513717759666
+    "pic": "/src/assets/img/e_1.jpg",
+    "position": {
+      "x": 607,
+      "y": 375
     }
   },
   {
@@ -351,10 +354,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/e1.jpg",
-    "Position": {
-      "x": 521.9077448175774,
-      "y": 378.9661555489384
+    "pic": "/src/assets/img/e1.jpg",
+    "position": {
+      "x": 522,
+      "y": 379
     }
   },
   {
@@ -366,14 +369,14 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/e5_1.jpg",
-    "Position": {
-      "x": 275.8257984447896,
-      "y": 254.06984038098724
+    "pic": "/src/assets/img/e5_1.jpg",
+    "position": {
+      "x": 276,
+      "y": 254
     }
   },
   {
-    "name": "E3工程四館（環工化工館）",
+    "name": "E3工程四館",
     "intro": "工程四館位於太空遙測中心的正後方，主要為環境工程學研究所、永續環境科技研究中心所使用。\n樓層分佈：\n左側2F 環境工程學研究所、工學院永續環境科技研究中心\n右側 化學工程與材料工程學系實驗館",
     "tag": [
       "環工所",
@@ -383,14 +386,14 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/e_4.jpg",
-    "Position": {
-      "x": 199.93518073838777,
-      "y": 289.4164099793047
+    "pic": "/src/assets/img/e_4.jpg",
+    "position": {
+      "x": 200,
+      "y": 289
     }
   },
   {
-    "name": "E2工程三館（機械館）",
+    "name": "E2工程三館",
     "intro": "工程三館位於操場的後方，與工程五館在同一條路上，主要為機械工程學系使用。工程三館旁也有籃球場喔～不妨在讀書累了之後到操場以及籃球場上盡情揮灑汗水。\n樓層分佈：\n1F 能源研究中心\n2F 生物醫學工程研究所\n3F能源工程研究所、光機電工程研究所、機械工程學系（所）",
     "tag": [
       "機械系",
@@ -398,19 +401,20 @@
       "能源工程所",
       "光機電所",
       "工學院",
-      "生醫理工學院"
+      "生醫理工學院",
+      "機械館"
     ],
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/e2_1.jpg",
-    "Position": {
-      "x": 272.8714124571126,
-      "y": 343.5608644325162
+    "pic": "/src/assets/img/e2_1.jpg",
+    "position": {
+      "x": 273,
+      "y": 344
     }
   },
   {
-    "name": "R2太空遙測中心",
+    "name": "太遙中心",
     "intro": "太空遙測中心成立於1984年7月1日，主要任務為太空及遙測科學知研究與教學，以及遙測技術知發展與應用。本中心研究以遙測科技為主軸，包括地球還測與太空環境遙測兩部分。本中心研究方向又可分為遙測技術研究群、空間資訊研究群和太空科學研究群等三個研究群。",
     "tag": [
       "研究中心"
@@ -418,14 +422,14 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/r2_1.jpg",
-    "Position": {
-      "x": 148.31619554055436,
-      "y": 347.34869421243224
+    "pic": "/src/assets/img/r2_1.jpg",
+    "position": {
+      "x": 120,
+      "y": 347
     }
   },
   {
-    "name": "R3研究中心大樓二期",
+    "name": "R3研究中心",
     "intro": "位在太空遙測中心前方，現為生醫理工學院所使用。",
     "tag": [
       "生醫系",
@@ -434,10 +438,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/r3_1.jpg",
-    "Position": {
-      "x": 194.64952887388773,
-      "y": 348.6820275457655
+    "pic": "/src/assets/img/r3_1.jpg",
+    "position": {
+      "x": 195,
+      "y": 349
     }
   },
   {
@@ -453,10 +457,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/e6.jpg",
-    "Position": {
-      "x": 190.99234608699405,
-      "y": 404.55404872775216
+    "pic": "/src/assets/img/e6.jpg",
+    "position": {
+      "x": 191,
+      "y": 425
     }
   },
   {
@@ -473,10 +477,10 @@
     "classify": [
       "1"
     ],
-    "pic": "/assets/img/yh_1.jpg",
-    "Position": {
-      "x": 458.06106754687744,
-      "y": 293.9278033449422
+    "pic": "/src/assets/img/yh_1.jpg",
+    "position": {
+      "x": 458,
+      "y": 294
     }
   },
   {
@@ -488,10 +492,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/b9_1.jpg",
-    "Position": {
-      "x": 843.75,
-      "y": 84.14187364748541
+    "pic": "/src/assets/img/b9_1.jpg",
+    "position": {
+      "x": 844,
+      "y": 84
     }
   },
   {
@@ -503,10 +507,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/b12_1.jpg",
-    "Position": {
-      "x": 788.0131291226822,
-      "y": 43.906249999999986
+    "pic": "/src/assets/img/b12_1.jpg",
+    "position": {
+      "x": 788,
+      "y": 44
     }
   },
   {
@@ -520,10 +524,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/ncuDorm_1.jpg",
-    "Position": {
-      "x": 784.5756291226821,
-      "y": 82.65624999999999
+    "pic": "/src/assets/img/ncuDorm_1.jpg",
+    "position": {
+      "x": 785,
+      "y": 83
     }
   },
   {
@@ -537,10 +541,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/bm_1.jpg",
-    "Position": {
-      "x": 734.5756291226821,
-      "y": 86.42366050963611
+    "pic": "/src/assets/img/bm_1.jpg",
+    "position": {
+      "x": 735,
+      "y": 86
     }
   },
   {
@@ -552,10 +556,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/b13_1.jpg",
-    "Position": {
-      "x": 864.0391431739954,
-      "y": 458.28705110144773
+    "pic": "/src/assets/img/b13_1.jpg",
+    "position": {
+      "x": 864,
+      "y": 458
     }
   },
   {
@@ -568,40 +572,25 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/b5_1.jpg",
-    "Position": {
-      "x": 793.0338915097843,
-      "y": 487.3182659751404
+    "pic": "/src/assets/img/b5_1.jpg",
+    "position": {
+      "x": 793,
+      "y": 487
     }
   },
   {
-    "name": "男6舍",
-    "intro": "與男七舍相通設有共同的公共空間。\n寢室設備皆為4人房上鋪雅房",
+    "name": "男6、7舍",
+    "intro": "男六、七舍相通設有共同的公共空間。一樓就有學生餐廳(松果餐廳)\n寢室設備皆為4人房上鋪雅房",
     "tag": [
       "男宿"
     ],
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/b6_1.jpg",
-    "Position": {
-      "x": 840.9328912697149,
-      "y": 504.3124316818887
-    }
-  },
-  {
-    "name": "男7舍",
-    "intro": "與男六舍相通設有共同的公共空間。一樓就有學生餐廳(松果餐廳)，寢室設備皆為4人房上鋪雅房",
-    "tag": [
-      "男宿"
-    ],
-    "classify": [
-      "2"
-    ],
-    "pic": "/assets/img/b7_1.jpg",
-    "Position": {
-      "x": 811.702376690726,
-      "y": 543.3075053646961
+    "pic": "/src/assets/img/b6_1.jpg",
+    "position": {
+      "x": 841,
+      "y": 504
     }
   },
   {
@@ -616,10 +605,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/b11_1.jpg",
-    "Position": {
-      "x": 784.1702177115325,
-      "y": 538.7866257167831
+    "pic": "/src/assets/img/b11_1.jpg",
+    "position": {
+      "x": 784,
+      "y": 539
     }
   },
   {
@@ -635,10 +624,10 @@
       "2",
       "3"
     ],
-    "pic": "/assets/img/internationalDorm_1.jpg",
-    "Position": {
-      "x": 745.1508203785437,
-      "y": 487.0237639851551
+    "pic": "/src/assets/img/internationalDorm_1.jpg",
+    "position": {
+      "x": 745,
+      "y": 487
     }
   },
   {
@@ -654,10 +643,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/g14_1.jpg",
-    "Position": {
-      "x": 736.4789868665441,
-      "y": 536.4796380640802
+    "pic": "/src/assets/img/g14_1.jpg",
+    "position": {
+      "x": 736,
+      "y": 536
     }
   },
   {
@@ -669,10 +658,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/b_3.png",
-    "Position": {
-      "x": 652.6406902906477,
-      "y": 533.970588235294
+    "pic": "/src/assets/img/b_3.png",
+    "position": {
+      "x": 653,
+      "y": 534
     }
   },
   {
@@ -684,10 +673,10 @@
     "classify": [
       "2"
     ],
-    "pic": "/assets/img/g1ToG4_1.jpg",
-    "Position": {
-      "x": 557.7940252029981,
-      "y": 479.3447533204903
+    "pic": "/src/assets/img/g1ToG4_1.jpg",
+    "position": {
+      "x": 558,
+      "y": 479
     }
   },
   {
@@ -702,10 +691,10 @@
     "classify": [
       "3"
     ],
-    "pic": "/assets/img/shinJang_1.jpg",
-    "Position": {
-      "x": 796.0280581881941,
-      "y": 300.70327806882483
+    "pic": "/src/assets/img/shinJang_1.jpg",
+    "position": {
+      "x": 796,
+      "y": 301
     }
   },
   {
@@ -722,10 +711,10 @@
     "classify": [
       "3"
     ],
-    "pic": "/assets/img/zhongZheng_1.jpg",
-    "Position": {
-      "x": 675.2588274189633,
-      "y": 305.6272137249044
+    "pic": "/src/assets/img/zhongZheng_1.jpg",
+    "position": {
+      "x": 675,
+      "y": 306
     }
   },
   {
@@ -738,10 +727,10 @@
     "classify": [
       "3"
     ],
-    "pic": "/assets/img/library.jpg",
-    "Position": {
-      "x": 736.028058188194,
-      "y": 306.0118291095198
+    "pic": "/src/assets/img/library.jpg",
+    "position": {
+      "x": 736,
+      "y": 306
     }
   },
   {
@@ -760,10 +749,10 @@
     "classify": [
       "3"
     ],
-    "pic": "/assets/img/tr.jpg",
-    "Position": {
-      "x": 573.2066138668187,
-      "y": 306.0252682845039
+    "pic": "/src/assets/img/tr.jpg",
+    "position": {
+      "x": 573,
+      "y": 306
     }
   }
 ]
