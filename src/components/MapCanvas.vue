@@ -23,6 +23,8 @@
       this.canvas = this.$refs.map;
       this.pin = new Image();
       this.pin.src = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='red'><path d='M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6'/></svg>"
+      this.info = new Image();
+      this.info.src = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='black'><path d='M 0.99999996,4.4133459 C 0.447715,4.4133459 0,4.8610611 0,5.4133458 v 5.0000002 c 0,0.552283 0.447715,0.999999 0.99999996,0.999999 0.59584904,-0.04087 5.18760884,-0.05651 5.64999984,0.2 l 0.9500001,1.2665 c 0.2,0.266666 0.6,0.266666 0.8,0 l 0.95,-1.2665 c 0.094427,-0.125903 0.2426214,-0.2 0.3999999,-0.2 H 15 c 0.552284,0 1,-0.447716 1,-0.999999 V 5.4133458 C 16,4.8610611 15.552284,4.4133459 15,4.4133459 Z' /></svg>"
       this.image = new Image();
       this.image.src = mapImg;
       this.image.onload = () => {
@@ -50,7 +52,16 @@
           return { name: loc.name, x1: pinX - 16, x2: pinX + 16, y1: pinY - 32, y2: pinY };
         });
         this.pinPosition.forEach(pin => {
-          ctx.drawImage(this.pin, pin.x1, pin.y1, 32, 32);
+          if (this.hovering && (pin.name === this.hovered)) {
+            ctx.drawImage(this.pin, pin.x1 - 4, pin.y1 - 8, 40, 40);
+            ctx.drawImage(this.info, pin.x1 - 19, pin.y1 - 72, 70, 70);
+            ctx.fillStyle = "white";
+            ctx.font = "15px monospace";
+            ctx.font = (ctx.measureText(pin.name).width < 70) ? "15px monospace" : "12px monospace";
+            ctx.fillText(pin.name, pin.x1 - (ctx.measureText(pin.name).width / 2) + 16, pin.y1 - 32);
+          } else {
+            ctx.drawImage(this.pin, pin.x1, pin.y1, 32, 32);
+          }
         });
       },
       resize() {
@@ -191,7 +202,10 @@
         if (touched) this.showDetail(touched);
       },
     },
-  };
+    watch: {
+      hovering() { this.draw(); },
+    },
+};
 </script>
 
 <template>
