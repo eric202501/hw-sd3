@@ -15,6 +15,7 @@
         pinching: false,
         hovering: false,
         scaling: false,
+        ShowAllPin: false,
         pinOnDisplay: [],
         pinPosition: [],
       };
@@ -61,8 +62,16 @@
             ctx.fillText(pin.name, pin.x1 - (ctx.measureText(pin.name).width / 2) + 16, pin.y1 - 32);
           } else {
             ctx.drawImage(this.pin, pin.x1, pin.y1, 32, 32);
+            if (this.ShowAllPin) {
+              ctx.drawImage(this.info, pin.x1 - 19, pin.y1 - 60, 70, 70);
+              ctx.fillStyle = "white";
+              ctx.font = "15px monospace";
+              ctx.font = (ctx.measureText(pin.name).width < 70) ? "15px monospace" : "12px monospace";
+              ctx.fillText(pin.name, pin.x1 - (ctx.measureText(pin.name).width / 2) + 16, pin.y1 - 20);
+            }
           }
         });
+        if (this.ShowAllPin) { this.ShowAllPin = false; } 
       },
       resize() {
         this.touch = window.matchMedia("(pointer: coarse)").matches;
@@ -171,6 +180,7 @@
       showResult(result) {
         this.pinOnDisplay = locData.filter(loc => result.includes(loc.name))
           .map(loc => ({ name: loc.name, x: loc.position.x, y: loc.position.y }));
+        this.ShowAllPin = true;
         this.draw();
       },
       hover(e) {
